@@ -13,6 +13,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { formatPrice, formatMarketCap, formatPercentage, formatSupply } from "@/utils/formatters";
 import { useToast } from "@/hooks/use-toast";
 import CoinInfo from "@/components/CoinInfo";
+import { useTheme } from "@/components/theme-provider";
 
 const CryptoDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +25,7 @@ const CryptoDetails = () => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const loadCryptoDetails = async () => {
     if (!id) return;
@@ -80,22 +82,21 @@ const CryptoDetails = () => {
       toggleFavorite(crypto.id);
     }
   };
-
   if (isLoading || !crypto) {
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-4">
-          <SkeletonLoader className="h-12 w-12 rounded-full" />
+          <SkeletonLoader className={`h-12 w-12 rounded-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
           <div className="space-y-2">
-            <SkeletonLoader className="h-6 w-48" />
-            <SkeletonLoader className="h-4 w-24" />
+            <SkeletonLoader className={`h-6 w-48 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+            <SkeletonLoader className={`h-4 w-24 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
           </div>
         </div>
-        <SkeletonLoader className="h-[400px] w-full" />
+        <SkeletonLoader className={`h-[400px] w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <SkeletonLoader className="h-32" />
-          <SkeletonLoader className="h-32" />
-          <SkeletonLoader className="h-32" />
+          <SkeletonLoader className={`h-32 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          <SkeletonLoader className={`h-32 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          <SkeletonLoader className={`h-32 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
         </div>
       </div>
     );
