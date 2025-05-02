@@ -122,9 +122,8 @@ const CryptoDetails = () => {
           className="flex items-center gap-2"
         >
           <Star
-            className={`h-4 w-4 ${
-              isFavorite(crypto.id) ? "fill-yellow-400" : ""
-            }`}
+            className={`h-4 w-4 ${isFavorite(crypto.id) ? "fill-yellow-400" : ""
+              }`}
           />
           {isFavorite(crypto.id) ? "Remove from Favorites" : "Add to Favorites"}
         </Button>

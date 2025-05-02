@@ -26,6 +26,7 @@ export class ApiKeyManager {
 const apiKeys = [
   import.meta.env.VITE_COINGECKO_API_KEY_1 || "",
   import.meta.env.VITE_COINGECKO_API_KEY_2 || "",
+  import.meta.env.VITE_COINGECKO_API_KEY_3 || "",
 ].filter(key => key); // Remove empty keys
 
 if (apiKeys.length === 0) {

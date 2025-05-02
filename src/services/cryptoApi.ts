@@ -11,22 +11,22 @@ const getHeaders = () => {
   };
 };
 
-const timeRangeToParams = (range: TimeRange): { days: string; interval: string } => {
+const timeRangeToParams = (range: TimeRange): { days: string } => {
   switch (range) {
     case '1d':
-      return { days: '1', interval: 'hour' };
+      return { days: '1' };
     case '7d':
-      return { days: '7', interval: 'hour' };
+      return { days: '7' };
     case '30d':
-      return { days: '30', interval: 'day' };
+      return { days: '30' };
     case '90d':
-      return { days: '90', interval: 'day' };
+      return { days: '90' };
     case '1y':
-      return { days: '365', interval: 'day' };
+      return { days: '365' };
     case 'max':
-      return { days: 'max', interval: 'day' };
+      return { days: 'max' };
     default:
-      return { days: '7', interval: 'hour' };
+      return { days: '7' };
   }
 };
 
@@ -123,9 +123,9 @@ export const fetchHistoricalData = async (
 ): Promise<HistoricalData> => {
   try {
     await rateLimiter.waitForNextRequest();
-    const { days, interval } = timeRangeToParams(range);
+    const { days } = timeRangeToParams(range);
     const response = await fetch(
-      `${API_BASE_URL}/coins/${id}/market_chart?vs_currency=usd&days=${days}&interval=${interval}`,
+      `${API_BASE_URL}/coins/${id}/market_chart?vs_currency=usd&days=${days}`,
       {
         headers: getHeaders()
       }
@@ -202,9 +202,6 @@ export const searchCryptocurrencies = async (query: string): Promise<Cryptocurre
     throw error;
   }
 };
-
-
-
 
 export const HistoricalChart = (id, days = 365, currency) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;

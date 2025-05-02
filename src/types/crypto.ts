@@ -13,9 +13,6 @@ export interface Cryptocurrency {
   max_supply: number | null;
   description?: string;
   categories?: string[];
-  sparkline_in_7d?: {
-    price: number[];
-  };
   links?: {
     homepage?: string[];
     blockchain_site?: string[];
