@@ -29,7 +29,7 @@ const PriceChart: React.FC<PriceChartProps> = ({
   color = "#6E56CF",
 }) => {
   console.log(data, "data")
-  
+
   if (isLoading) {
     return (
       <Card className="bg-crypto-card p-4 rounded-xl h-[400px] flex items-center justify-center">
@@ -106,14 +106,14 @@ const PriceChart: React.FC<PriceChartProps> = ({
   };
 
   return (
-    <Card className="bg-crypto-card p-4 rounded-xl">
-      <div className="flex flex-wrap gap-2 mb-4">
+    <Card className="bg-crypto-card p-4 rounded-xl w-full">
+      <div className="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start">
         {(["1d", "7d", "30d", "90d", "1y", "max"] as TimeRange[]).map(
           (range) => (
             <Button
               key={range}
               variant={timeRange === range ? "secondary" : "outline"}
-              className={`px-3 py-1 text-sm ${timeRange === range ? "bg-crypto-accent text-white" : ""
+              className={`sm:text-sm px-3 py-1 text-sm ${timeRange === range ? "bg-crypto-accent text-white" : ""
                 }`}
               onClick={() => onTimeRangeChange(range)}
             >
@@ -122,7 +122,7 @@ const PriceChart: React.FC<PriceChartProps> = ({
           )
         )}
       </div>
-      <div className="h-[300px]">
+      <div className="h-[250px] sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#2D2A39" />
@@ -130,14 +130,14 @@ const PriceChart: React.FC<PriceChartProps> = ({
               dataKey="timestamp"
               tickFormatter={formatXAxis}
               stroke="#666"
-              tick={{ fill: "#999" }}
+              tick={{ fill: "#999", fontSize: 12 }}
               axisLine={{ stroke: "#333" }}
             />
             <YAxis
               domain={["auto", "auto"]}
               tickFormatter={(value) => formatPrice(value)}
               stroke="#666"
-              tick={{ fill: "#999" }}
+              tick={{ fill: "#999", fontSize: 12 }}
               axisLine={{ stroke: "#333" }}
             />
             <Tooltip content={<CustomTooltip />} />

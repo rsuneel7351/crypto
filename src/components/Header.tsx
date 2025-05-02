@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -19,6 +19,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -76,78 +77,162 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex">
-          <a href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">CryptoWatch</span>
-          </a>
-        </div>
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between gap-4">
+          {/* Left Section - Logo and Search */}
+          <div className="flex flex-1 items-center gap-4">
+            <Link to="/" className="flex items-center gap-2">
+              <img src="/favicon.svg" alt="Logo" className="h-8 w-8" />
+              <span className="hidden sm:inline-block text-lg font-semibold">CryptoWatch</span>
+            </Link>
 
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="relative w-full max-w-sm" ref={searchRef}>
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search cryptocurrencies..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={handleSearch}
-                onFocus={() => searchQuery.length >= 3 && setShowResults(true)}
-              />
-            </div>
-
-            {showResults && searchResults.length > 0 && (
-              <Card className="absolute left-0 right-0 top-full mt-1 max-h-[300px] overflow-y-auto">
-                <div className="p-2">
-                  {searchResults.map((crypto) => (
-                    <div
-                      key={crypto.id}
-                      className="flex cursor-pointer items-center space-x-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
-                      onClick={() => handleResultClick(crypto)}
-                    >
-                      <img
-                        src={crypto.image}
-                        alt={crypto.name}
-                        className="h-6 w-6 rounded-full"
-                      />
-                      <span className="font-medium">{crypto.name}</span>
-                      <span className="text-muted-foreground">
-                        {crypto.symbol.toUpperCase()}
-                      </span>
+            {/* Search Input - Hidden on mobile, visible on tablet and up */}
+            <div className="hidden md:block relative flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search cryptocurrencies..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="w-full pl-9"
+                />
+              </div>
+              {showResults && (
+                <div className="absolute top-full left-0 right-0 mt-1 max-h-[300px] overflow-y-auto rounded-md border bg-background shadow-lg">
+                  {isSearching ? (
+                    <div className="flex items-center justify-center p-4">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
                     </div>
-                  ))}
+                  ) : searchResults.length > 0 ? (
+                    <div className="py-1">
+                      {searchResults.map((crypto) => (
+                        <button
+                          key={crypto.id}
+                          onClick={() => handleResultClick(crypto)}
+                          className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-accent"
+                        >
+                          <img
+                            src={crypto.image}
+                            alt={crypto.name}
+                            className="h-6 w-6"
+                          />
+                          <div>
+                            <p className="font-medium">{crypto.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {crypto.symbol.toUpperCase()}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-4 text-center text-muted-foreground">
+                      No results found
+                    </div>
+                  )}
                 </div>
-              </Card>
-            )}
-
-            {showResults && searchQuery.length >= 3 && searchResults.length === 0 && !isSearching && (
-              <Card className="absolute left-0 right-0 top-full mt-1 p-4">
-                <p className="text-sm text-muted-foreground">No cryptocurrencies found</p>
-              </Card>
-            )}
+              )}
+            </div>
           </div>
 
-          <Button
-            variant="outline"
-            onClick={() => navigate('/favorites')}
-            className="ml-2 flex items-center gap-2 w-auto bg-crypto-card border border-crypto-accent/30 hover:bg-crypto-accent/10 hover:border-crypto-accent transition-colors duration-300"
-          >
-            <Star className="h-4 w-4" />
-            Favorites
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="ml-2"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </Button>
+          {/* Right Section - Actions */}
+          <div className="flex items-center gap-2">
+            {/* Mobile Search Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setShowMobileSearch(!showMobileSearch)}
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+
+            {/* Favorites Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden sm:flex items-center gap-2"
+              onClick={() => navigate("/favorites")}
+            >
+              <Star className="h-4 w-4" />
+              <span>Favorites</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="sm:hidden"
+              onClick={() => navigate("/favorites")}
+            >
+              <Star className="h-4 w-4" />
+            </Button>
+
+            {/* Theme Toggle */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              className="flex items-center justify-center"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
+
+        {/* Mobile Search - Shows below header when active */}
+        {showMobileSearch && (
+          <div className="py-4 md:hidden">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search cryptocurrencies..."
+                value={searchQuery}
+                onChange={handleSearch}
+                className="w-full pl-9"
+              />
+            </div>
+            {showResults && (
+              <div className="absolute left-4 right-4 mt-1 max-h-[300px] overflow-y-auto rounded-md border bg-background shadow-lg">
+                {isSearching ? (
+                  <div className="flex items-center justify-center p-4">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <div className="py-1">
+                    {searchResults.map((crypto) => (
+                      <button
+                        key={crypto.id}
+                        onClick={() => handleResultClick(crypto)}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-accent"
+                      >
+                        <img
+                          src={crypto.image}
+                          alt={crypto.name}
+                          className="h-6 w-6"
+                        />
+                        <div>
+                          <p className="font-medium">{crypto.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {crypto.symbol.toUpperCase()}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-muted-foreground">
+                    No results found
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );
