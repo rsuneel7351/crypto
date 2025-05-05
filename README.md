@@ -104,7 +104,7 @@ const url = `${process.env.REACT_APP_API_BASE}/coins/markets?...`;
 ## 👤 Author
 
 **Suneel Kumar**
-Frontend Developer (React)
+Full Stack Developer
 GitHub1: [rsuneel7351](https://github.com/rsuneel7351)
 GitHub2: [suneel7351](https://github.com/suneel7351)
 LinkedIn: [suneel7351](https://www.linkedin.com/in/suneel7351/)
